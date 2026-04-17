@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SyntheticSpanish v1 — Voice Dataset Demo</title>
+<style>
+  /* ── Reset & base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    background: #f7f7f8;
+    color: #1a1a2e;
+    line-height: 1.6;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #b63b6d 100%);
+    color: white;
+    padding: 72px 24px 56px;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 16px;
+  }
+  .hero .subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    opacity: 0.88;
+    max-width: 680px;
+    margin: 0 auto 28px;
+  }
+  .badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+  .badge {
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 20px;
+    padding: 5px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── Content wrapper ── */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ── Section cards ── */
+  .section {
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    padding: 36px 40px;
+    margin: 36px auto;
+    max-width: 960px;
+  }
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #b63b6d;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0e0e7;
+  }
+  .section p {
+    color: #444;
+    font-size: 0.97rem;
+    margin-bottom: 10px;
+  }
+  .section p:last-child { margin-bottom: 0; }
+
+  /* ── Pipeline steps ── */
+  .pipeline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .step {
+    flex: 1 1 160px;
+    background: #fdf2f6;
+    border: 1.5px solid #e8c4d4;
+    border-radius: 10px;
+    padding: 14px 16px;
+    text-align: center;
+    font-size: 0.88rem;
+  }
+  .step .step-num {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #b63b6d;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .arrow {
+    display: flex;
+    align-items: center;
+    color: #b63b6d;
+    font-size: 1.4rem;
+    font-weight: 300;
+    flex: 0 0 auto;
+    align-self: center;
+  }
+
+  /* ── Audio table ── */
+  .table-wrapper { overflow-x: auto; }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.92rem;
+  }
+  thead th {
+    background: #b63b6d;
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 14px 16px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  thead th:first-child { text-align: left; border-radius: 8px 0 0 0; }
+  thead th:last-child  { border-radius: 0 8px 0 0; }
+  tbody tr td {
+    padding: 12px 16px;
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 1px solid #ede8ea;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:nth-child(odd)  td { background: #fdf9fb; }
+  tbody tr:nth-child(even) td { background: #f7f0f3; }
+  .row-label {
+    text-align: left !important;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #555;
+    width: 110px;
+  }
+  audio {
+    width: 100%;
+    min-width: 200px;
+    max-width: 360px;
+    height: 36px;
+  }
+
+  /* ── Loading / error states ── */
+  #samples-table tbody tr.loading td {
+    color: #999;
+    font-style: italic;
+    text-align: center;
+    padding: 24px;
+  }
+  .error-msg {
+    color: #c0392b;
+    font-style: italic;
+    font-size: 0.85rem;
+  }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center;
+    padding: 32px 24px;
+    color: #999;
+    font-size: 0.82rem;
+  }
+  footer a { color: #b63b6d; text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<!-- ── Hero ── -->
+<header class="hero">
+  <h1>SyntheticSpanish <span style="opacity:0.7">v1</span></h1>
+  <p class="subtitle">
+    A parallel voice dataset pairing native LibriTTS speech with
+    synthetic Spanish-accented speech generated via ElevenLabs and voice conversion.
+  </p>
+  <div class="badge-row">
+    <span class="badge">LibriTTS</span>
+    <span class="badge">ElevenLabs · Elio</span>
+    <span class="badge">Seed-VC</span>
+    <span class="badge">Spanish Accent</span>
+  </div>
+</header>
+
+<!-- ── About ── -->
+<section class="section">
+  <div class="section-title">About</div>
+  <p>
+    <strong>SyntheticSpanish v1</strong> is a parallel speech corpus designed for accent-aware
+    voice synthesis research. Each sample pairs the same utterance spoken by a native
+    English LibriTTS speaker with a synthetic version carrying a Spanish accent,
+    produced by the ElevenLabs <em>Elio</em> voice model and further processed with Seed-VC.
+  </p>
+  <p>
+    The dataset enables direct listening comparison between the original (native) recording
+    and the accent-converted (Dorado) output for the same text content.
+  </p>
+</section>
+
+<!-- ── Pipeline ── -->
+<section class="section">
+  <div class="section-title">Pipeline</div>
+  <div class="pipeline">
+    <div class="step"><span class="step-num">1</span>LibriTTS corpus<br><small>Native English</small></div>
+    <div class="arrow">→</div>
+    <div class="step"><span class="step-num">2</span>ElevenLabs synthesis<br><small>Elio (Spanish accent)</small></div>
+    <div class="arrow">→</div>
+    <div class="step"><span class="step-num">3</span>Seed-VC conversion<br><small>Accent transfer</small></div>
+    <div class="arrow">→</div>
+    <div class="step"><span class="step-num">4</span>Parallel dataset<br><small>Native ↔ Dorado</small></div>
+  </div>
+</section>
+
+<!-- ── Audio samples ── -->
+<section class="section">
+  <div class="section-title">Audio Samples</div>
+  <div class="table-wrapper">
+    <table id="samples-table">
+      <thead>
+        <tr>
+          <th>Sample</th>
+          <th>Native speaker (LibriTTS)</th>
+          <th>Dorado speaker</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="loading"><td colspan="3">Loading samples…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  Dataset built with <a href="https://www.openslr.org/60/" target="_blank">LibriTTS</a>,
+  <a href="https://elevenlabs.io" target="_blank">ElevenLabs</a>, and
+  <a href="https://github.com/Plachtaa/seed-vc" target="_blank">Seed-VC</a>.
+</footer>
+
+<script>
+  const MANIFEST = "demo/manifest.json";
+
+  async function loadSamples() {
+    const tbody = document.querySelector("#samples-table tbody");
+    try {
+      const res = await fetch(MANIFEST);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const { samples } = await res.json();
+
+      tbody.innerHTML = "";
+      for (const { id, label } of samples) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="row-label">${label}</td>
+          <td><audio controls preload="none">
+                <source src="demo/${id}/native.wav" type="audio/wav">
+                <span class="error-msg">Audio not supported</span>
+              </audio></td>
+          <td><audio controls preload="none">
+                <source src="demo/${id}/dorado.wav" type="audio/wav">
+                <span class="error-msg">Audio not supported</span>
+              </audio></td>`;
+        tbody.appendChild(tr);
+      }
+    } catch (err) {
+      tbody.innerHTML = `<tr><td colspan="3" class="error-msg">
+        Could not load manifest: ${err.message}.
+        Make sure demo/manifest.json exists and the page is served over HTTP(S).
+      </td></tr>`;
+    }
+  }
+
+  loadSamples();
+</script>
+</body>
+</html>

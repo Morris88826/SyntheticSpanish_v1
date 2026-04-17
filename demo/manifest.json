@@ -1,0 +1,20 @@
+{
+    "samples": [
+        {
+            "id": "sample_01",
+            "label": "Sample 01"
+        },
+        {
+            "id": "sample_02",
+            "label": "Sample 02"
+        },
+        {
+            "id": "sample_03",
+            "label": "Sample 03"
+        },
+        {
+            "id": "sample_04",
+            "label": "Sample 04"
+        }
+    ]
+}
