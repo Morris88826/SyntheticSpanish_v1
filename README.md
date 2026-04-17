@@ -73,7 +73,7 @@ Run `preprocess.ipynb` to regenerate metadata from raw data.
 
 ## Demo
 
-See [`demo.html`](demo.html) for an interactive listening comparison between native and Dorado speakers.
+See [`demo.html`](https://morris88826.github.io/SyntheticSpanish_v1/demo.html) for an interactive listening comparison between native and Dorado speakers.
 
 ## Data Sources
 
