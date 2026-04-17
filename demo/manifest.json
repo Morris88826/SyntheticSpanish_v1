@@ -15,6 +15,30 @@
         {
             "id": "sample_04",
             "label": "Sample 04"
+        },
+        {
+            "id": "sample_05",
+            "label": "Sample 05"
+        },
+        {
+            "id": "sample_06",
+            "label": "Sample 06"
+        },
+        {
+            "id": "sample_07",
+            "label": "Sample 07"
+        },
+        {
+            "id": "sample_08",
+            "label": "Sample 08"
+        },
+        {
+            "id": "sample_09",
+            "label": "Sample 09"
+        },
+        {
+            "id": "sample_10",
+            "label": "Sample 10"
         }
     ]
 }
